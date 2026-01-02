@@ -1,4 +1,71 @@
+import { useEffect } from 'react';
+
 export default function Home() {
+  useEffect(() => {
+    // JavaScript code di sini
+    async function sendReact() {
+      const link = document.getElementById("link").value.trim();
+      const emojiRaw = document.getElementById("emoji").value.trim();
+      const result = document.getElementById("result");
+
+      if (!link || !emojiRaw) {
+        result.textContent = "❌ Link dan emoji wajib diisi";
+        return;
+      }
+
+      // Format emoji
+      const emoji = emojiRaw.replace(/,/g, " ").split(/\s+/).join(",");
+
+      result.textContent = "⏳ Mengirim react...";
+
+      try {
+        // PAKAI API LOKAL DI VERCEL
+        const response = await fetch(
+          `/api/react?link=${encodeURIComponent(link)}&emoji=${encodeURIComponent(emoji)}`
+        );
+
+        const data = await response.json();
+        
+        if (response.ok) {
+          result.textContent = 
+`✅ SUCCESS
+
+Link:
+${link}
+
+Emoji:
+${emoji.replace(/,/g, " ")}
+
+Response:
+${JSON.stringify(data, null, 2)}`;
+        } else {
+          result.textContent = `❌ ERROR: ${data.error || "Unknown error"}`;
+        }
+      } catch (error) {
+        result.textContent = "❌ API tidak bisa diakses";
+        console.error(error);
+      }
+    }
+
+    // Music control
+    const music = document.getElementById("bgMusic");
+    const musicBtn = document.querySelector(".music-player");
+
+    function toggleMusic() {
+      if (music.paused) {
+        music.play();
+        musicBtn.classList.add("playing");
+      } else {
+        music.pause();
+        musicBtn.classList.remove("playing");
+      }
+    }
+
+    // Attach functions to window
+    window.sendReact = sendReact;
+    window.toggleMusic = toggleMusic;
+  }, []);
+
   return (
     <html lang="id">
       <head>
@@ -6,7 +73,6 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Reactch Web</title>
         <style>{`
-          /* SALIN SEMUA CSS KAMU DI SINI */
           * {
             box-sizing: border-box;
           }
@@ -23,13 +89,160 @@ export default function Home() {
             overflow: hidden;
           }
 
-          /* ... LANJUTKAN SAMPAI AKHIR CSS ... */
+          .card {
+            position: relative;
+            background: rgba(2,6,23,.88);
+            backdrop-filter: blur(14px);
+            border-radius: 18px;
+            width: 100%;
+            max-width: 420px;
+            padding: 26px;
+            box-shadow: 0 30px 70px rgba(0,0,0,.7);
+            z-index: 2;
+            animation: fadeUp .8s ease;
+          }
+
+          .card::before {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            border-radius: 20px;
+            background: linear-gradient(
+              90deg,
+              red,
+              orange,
+              yellow,
+              lime,
+              cyan,
+              blue,
+              magenta,
+              red
+            );
+            background-size: 400% 400%;
+            animation: rgbFlow 8s linear infinite;
+            z-index: -1;
+          }
+
+          .card::after {
+            content: "";
+            position: absolute;
+            inset: 2px;
+            background: rgba(2,6,23,.95);
+            border-radius: 16px;
+            z-index: -1;
+          }
+
+          @keyframes rgbFlow {
+            0%   { background-position: 0% 50%; }
+            100% { background-position: 400% 50%; }
+          }
+
+          @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+          }
+
+          h1 {
+            margin: 0 0 6px;
+            font-size: 22px;
+            text-align: center;
+          }
+
+          .subtitle {
+            text-align: center;
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 22px;
+          }
+
+          label {
+            font-size: 13px;
+            color: #cbd5f5;
+          }
+
+          input {
+            width: 100%;
+            padding: 13px;
+            margin-top: 6px;
+            margin-bottom: 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(148,163,184,.2);
+            background: rgba(2,6,23,.9);
+            color: #fff;
+            outline: none;
+          }
+
+          input:focus {
+            border-color: #22c55e;
+            box-shadow: 0 0 0 2px rgba(34,197,94,.25);
+          }
+
+          button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 14px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: #020617;
+            cursor: pointer;
+            transition: transform .15s ease, box-shadow .15s ease;
+          }
+
+          button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(34,197,94,.45);
+          }
+
+          .result {
+            margin-top: 18px;
+            padding: 14px;
+            background: rgba(2,6,23,.9);
+            border-radius: 12px;
+            border: 1px solid rgba(148,163,184,.15);
+            font-size: 13px;
+            white-space: pre-wrap;
+            min-height: 70px;
+          }
+
+          .footer {
+            margin-top: 16px;
+            text-align: center;
+            font-size: 11px;
+            color: #64748b;
+          }
+
+          .music-player {
+            position: fixed;
+            bottom: 18px;
+            right: 18px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: #020617;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(34,197,94,.45);
+            z-index: 99;
+            font-size: 20px;
+          }
+
+          .music-player.playing {
+            animation: spin 3s linear infinite;
+          }
+
+          @keyframes spin {
+            to { transform: rotate(360deg); }
+          }
         `}</style>
       </head>
       <body>
-        <div class="card">
+        <div className="card">
           <h1>🚀 Reactch Web</h1>
-          <div class="subtitle">Send reaction to WhatsApp Channel post</div>
+          <div className="subtitle">Send reaction to WhatsApp Channel post</div>
 
           <label>🔗 Link Post Channel</label>
           <input id="link" placeholder="https://whatsapp.com/channel/xxx/123" />
@@ -37,77 +250,17 @@ export default function Home() {
           <label>🎭 Emoji</label>
           <input id="emoji" placeholder="😂 😱 🔥" />
 
-          <button onclick="sendReact()">KIRIM REACT</button>
+          <button onClick={() => window.sendReact && window.sendReact()}>KIRIM REACT</button>
 
-          <div id="result" class="result">Status: -</div>
+          <div id="result" className="result">Status: -</div>
 
-          <div class="footer">© 2026 Reactch Interface</div>
+          <div className="footer">© 2026 Reactch Interface</div>
         </div>
 
-        <div class="music-player" onclick="toggleMusic()">
+        <div className="music-player" onClick={() => window.toggleMusic && window.toggleMusic()}>
           🎵
           <audio id="bgMusic" src="https://files.catbox.moe/a5ncoy.mp3" loop></audio>
         </div>
-
-        <script>
-          async function sendReact() {
-            const link = document.getElementById("link").value.trim();
-            const emojiRaw = document.getElementById("emoji").value.trim();
-            const result = document.getElementById("result");
-
-            if (!link || !emojiRaw) {
-              result.textContent = "❌ Link dan emoji wajib diisi";
-              return;
-            }
-
-            // Format emoji
-            const emoji = emojiRaw.replace(/,/g, " ").split(/\s+/).join(",");
-
-            result.textContent = "⏳ Mengirim react...";
-
-            try {
-              // PAKAI API LOKAL DI VERCEL
-              const response = await fetch(
-                \`/api/react?link=\${encodeURIComponent(link)}&emoji=\${encodeURIComponent(emoji)}\`
-              );
-
-              const data = await response.json();
-              
-              if (response.ok) {
-                result.textContent = 
-\`✅ SUCCESS
-
-Link:
-\${link}
-
-Emoji:
-\${emoji.replace(/,/g, " ")}
-
-Response:
-\${JSON.stringify(data, null, 2)}\`;
-              } else {
-                result.textContent = \`❌ ERROR: \${data.error || "Unknown error"}\`;
-              }
-            } catch (error) {
-              result.textContent = "❌ API tidak bisa diakses";
-              console.error(error);
-            }
-          }
-
-          // Music control
-          const music = document.getElementById("bgMusic");
-          const musicBtn = document.querySelector(".music-player");
-
-          function toggleMusic() {
-            if (music.paused) {
-              music.play();
-              musicBtn.classList.add("playing");
-            } else {
-              music.pause();
-              musicBtn.classList.remove("playing");
-            }
-          }
-        </script>
       </body>
     </html>
   );
