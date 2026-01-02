@@ -13,33 +13,43 @@ export default function Home() {
         return;
       }
 
-      // Format emoji
-      const emoji = emojiRaw.replace(/,/g, " ").split(/\s+/).join(",");
-      result.textContent = "⏳ Mengirim react...";
+      // Format: "😂, 🔥" (sama seperti bot)
+      const emoji = emojiRaw.replace(/,/g, " ").split(/\s+/).filter(e => e).join(', ');
+      
+      result.textContent = "⏳ Mengirim react via Bot API...";
 
       try {
         const response = await fetch(
           `/api/react?link=${encodeURIComponent(link)}&emoji=${encodeURIComponent(emoji)}`
         );
+        
         const data = await response.json();
         
-        if (response.ok) {
+        if (data.success) {
           result.textContent = 
-`✅ SUCCESS
+`✅ REACTION BERHASIL!
 
-Link:
+🔗 Link:
 ${link}
 
-Emoji:
-${emoji.replace(/,/g, " ")}
+🎭 Emoji:
+${emoji}
 
-Response:
-${JSON.stringify(data, null, 2)}`;
+📝 Pesan:
+${data.message}
+
+🤖 Bot Response:
+${data.botResponse || '-'}`;
         } else {
-          result.textContent = `❌ ERROR: ${data.error || data.message || "Unknown error"}`;
+          result.textContent = 
+`❌ GAGAL
+
+Error: ${data.error || data.message}
+
+Detail: ${data.details || 'Coba lagi'}`;
         }
       } catch (error) {
-        result.textContent = "❌ API tidak bisa diakses. Coba lagi.";
+        result.textContent = "❌ API tidak bisa diakses. Cek koneksi.";
         console.error(error);
       }
     }
@@ -228,7 +238,7 @@ ${JSON.stringify(data, null, 2)}`;
         
         <div className="music-player" onClick={() => window.toggleMusic && window.toggleMusic()}>
           🎵
-          <audio id="bgMusic" src="https://files.catbox.moe/a5ncoy.mp3" loop></audio>
+          <audio id="bgMusic" src="https://files.catbox.moe/feurs1.m4a" loop></audio>
         </div>
       </body>
     </html>
