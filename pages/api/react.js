@@ -35,7 +35,7 @@ export default async function handler(req, res) {
     const headers = {
       'Accept': 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MzgyZDFhMTE0YWI3MTE5ZmNhNTdjZiIsImlhdCI6MTc2NTI4OTI0MiwiZXhwIjoxNzY1ODk0MDQyfQ.PyblreikWf2_fcPwRfrM_w-_VZmSlvk1vQtrrOuNFBo'
+      'Authorization': 'Bearer 040f2f333ec598e6b0baba7b0e083d03598201f8dcf5818a662112368541580a'
     };
 
     // Kirim ke API bot
