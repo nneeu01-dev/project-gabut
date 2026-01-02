@@ -220,7 +220,7 @@ Detail: ${data.details || 'Coba lagi'}`;
       </head>
       <body>
         <div className="card">
-          <h1>🚀 Reactch Web</h1>
+          <h1>🚀 React ch whatsapp</h1>
           <div className="subtitle">Send reaction to WhatsApp Channel post</div>
           
           <label>🔗 Link Post Channel</label>
@@ -233,7 +233,7 @@ Detail: ${data.details || 'Coba lagi'}`;
           
           <div id="result" className="result">Status: -</div>
           
-          <div className="footer">© 2026 Reactch Interface</div>
+          <div className="footer">© 2026 dhekzsukiloli</div>
         </div>
         
         <div className="music-player" onClick={() => window.toggleMusic && window.toggleMusic()}>
