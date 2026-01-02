@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 
 export default function Home() {
   useEffect(() => {
-    // JavaScript code di sini
+    // JavaScript functions
     async function sendReact() {
-      const link = document.getElementById("link").value.trim();
-      const emojiRaw = document.getElementById("emoji").value.trim();
+      const link = document.getElementById("link")?.value.trim();
+      const emojiRaw = document.getElementById("emoji")?.value.trim();
       const result = document.getElementById("result");
 
       if (!link || !emojiRaw) {
@@ -15,15 +15,12 @@ export default function Home() {
 
       // Format emoji
       const emoji = emojiRaw.replace(/,/g, " ").split(/\s+/).join(",");
-
       result.textContent = "⏳ Mengirim react...";
 
       try {
-        // PAKAI API LOKAL DI VERCEL
         const response = await fetch(
           `/api/react?link=${encodeURIComponent(link)}&emoji=${encodeURIComponent(emoji)}`
         );
-
         const data = await response.json();
         
         if (response.ok) {
@@ -39,29 +36,31 @@ ${emoji.replace(/,/g, " ")}
 Response:
 ${JSON.stringify(data, null, 2)}`;
         } else {
-          result.textContent = `❌ ERROR: ${data.error || "Unknown error"}`;
+          result.textContent = `❌ ERROR: ${data.error || data.message || "Unknown error"}`;
         }
       } catch (error) {
-        result.textContent = "❌ API tidak bisa diakses";
+        result.textContent = "❌ API tidak bisa diakses. Coba lagi.";
         console.error(error);
       }
     }
 
     // Music control
-    const music = document.getElementById("bgMusic");
-    const musicBtn = document.querySelector(".music-player");
-
     function toggleMusic() {
-      if (music.paused) {
-        music.play();
-        musicBtn.classList.add("playing");
-      } else {
-        music.pause();
-        musicBtn.classList.remove("playing");
+      const music = document.getElementById("bgMusic");
+      const musicBtn = document.querySelector(".music-player");
+      
+      if (music && musicBtn) {
+        if (music.paused) {
+          music.play();
+          musicBtn.classList.add("playing");
+        } else {
+          music.pause();
+          musicBtn.classList.remove("playing");
+        }
       }
     }
 
-    // Attach functions to window
+    // Attach to window for HTML onclick
     window.sendReact = sendReact;
     window.toggleMusic = toggleMusic;
   }, []);
@@ -73,10 +72,7 @@ ${JSON.stringify(data, null, 2)}`;
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Reactch Web</title>
         <style>{`
-          * {
-            box-sizing: border-box;
-          }
-
+          * { box-sizing: border-box; }
           body {
             margin: 0;
             font-family: "Segoe UI", Arial, sans-serif;
@@ -88,7 +84,6 @@ ${JSON.stringify(data, null, 2)}`;
             height: 100vh;
             overflow: hidden;
           }
-
           .card {
             position: relative;
             background: rgba(2,6,23,.88);
@@ -101,28 +96,16 @@ ${JSON.stringify(data, null, 2)}`;
             z-index: 2;
             animation: fadeUp .8s ease;
           }
-
           .card::before {
             content: "";
             position: absolute;
             inset: -2px;
             border-radius: 20px;
-            background: linear-gradient(
-              90deg,
-              red,
-              orange,
-              yellow,
-              lime,
-              cyan,
-              blue,
-              magenta,
-              red
-            );
+            background: linear-gradient(90deg, red, orange, yellow, lime, cyan, blue, magenta, red);
             background-size: 400% 400%;
             animation: rgbFlow 8s linear infinite;
             z-index: -1;
           }
-
           .card::after {
             content: "";
             position: absolute;
@@ -131,35 +114,29 @@ ${JSON.stringify(data, null, 2)}`;
             border-radius: 16px;
             z-index: -1;
           }
-
           @keyframes rgbFlow {
-            0%   { background-position: 0% 50%; }
+            0% { background-position: 0% 50%; }
             100% { background-position: 400% 50%; }
           }
-
           @keyframes fadeUp {
             from { opacity: 0; transform: translateY(20px); }
-            to   { opacity: 1; transform: translateY(0); }
+            to { opacity: 1; transform: translateY(0); }
           }
-
           h1 {
             margin: 0 0 6px;
             font-size: 22px;
             text-align: center;
           }
-
           .subtitle {
             text-align: center;
             font-size: 13px;
             color: #94a3b8;
             margin-bottom: 22px;
           }
-
           label {
             font-size: 13px;
             color: #cbd5f5;
           }
-
           input {
             width: 100%;
             padding: 13px;
@@ -171,12 +148,10 @@ ${JSON.stringify(data, null, 2)}`;
             color: #fff;
             outline: none;
           }
-
           input:focus {
             border-color: #22c55e;
             box-shadow: 0 0 0 2px rgba(34,197,94,.25);
           }
-
           button {
             width: 100%;
             padding: 14px;
@@ -188,12 +163,10 @@ ${JSON.stringify(data, null, 2)}`;
             cursor: pointer;
             transition: transform .15s ease, box-shadow .15s ease;
           }
-
           button:hover {
             transform: translateY(-2px);
             box-shadow: 0 12px 25px rgba(34,197,94,.45);
           }
-
           .result {
             margin-top: 18px;
             padding: 14px;
@@ -204,14 +177,12 @@ ${JSON.stringify(data, null, 2)}`;
             white-space: pre-wrap;
             min-height: 70px;
           }
-
           .footer {
             margin-top: 16px;
             text-align: center;
             font-size: 11px;
             color: #64748b;
           }
-
           .music-player {
             position: fixed;
             bottom: 18px;
@@ -229,11 +200,9 @@ ${JSON.stringify(data, null, 2)}`;
             z-index: 99;
             font-size: 20px;
           }
-
           .music-player.playing {
             animation: spin 3s linear infinite;
           }
-
           @keyframes spin {
             to { transform: rotate(360deg); }
           }
@@ -243,20 +212,20 @@ ${JSON.stringify(data, null, 2)}`;
         <div className="card">
           <h1>🚀 Reactch Web</h1>
           <div className="subtitle">Send reaction to WhatsApp Channel post</div>
-
+          
           <label>🔗 Link Post Channel</label>
           <input id="link" placeholder="https://whatsapp.com/channel/xxx/123" />
-
+          
           <label>🎭 Emoji</label>
           <input id="emoji" placeholder="😂 😱 🔥" />
-
+          
           <button onClick={() => window.sendReact && window.sendReact()}>KIRIM REACT</button>
-
+          
           <div id="result" className="result">Status: -</div>
-
+          
           <div className="footer">© 2026 Reactch Interface</div>
         </div>
-
+        
         <div className="music-player" onClick={() => window.toggleMusic && window.toggleMusic()}>
           🎵
           <audio id="bgMusic" src="https://files.catbox.moe/a5ncoy.mp3" loop></audio>
