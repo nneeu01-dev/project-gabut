@@ -16,7 +16,7 @@ export default function Home() {
       // Format: "😂, 🔥" 
       const emoji = emojiRaw.replace(/,/g, " ").split(/\s+/).filter(e => e).join(', ');
       
-      result.textContent = "⏳ Mengirim react via API...";
+      result.textContent = "⏳ Mengirim react... (Menggunakan API Key baru)";
 
       try {
         const response = await fetch(
@@ -38,8 +38,11 @@ ${emoji}
 📝 Pesan:
 ${data.message}
 
-🔑 API Key:
-${data.apiKeyUsed || 'Using new API Key from asitha.top'}`;
+💰 Saldo Tersisa:
+${data.balance || '147 KOIN'}
+
+⚡ Metode:
+${data.method || 'Bearer Token'}`;
         } else {
           result.textContent = 
 `❌ GAGAL
@@ -48,10 +51,10 @@ Error: ${data.error || data.message}
 
 Detail: ${data.details || 'Coba lagi'}
 
-💡 API Status: ${data.apiKeyUsed || 'Key: dab69bae...'}`;
+💡 Info: ${data.solution || 'Format API: Authorization: Bearer <Key>'}`;
         }
       } catch (error) {
-        result.textContent = "❌ API tidak bisa diakses. Cek koneksi.";
+        result.textContent = "❌ API tidak bisa diakses. Cek koneksi internet.";
         console.error(error);
       }
     }
@@ -82,7 +85,7 @@ Detail: ${data.details || 'Coba lagi'}
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Reactch Web</title>
+        <title>Reactch Web - Asitha API</title>
         <style>{`
           * { box-sizing: border-box; }
           body {
@@ -138,6 +141,9 @@ Detail: ${data.details || 'Coba lagi'}
             margin: 0 0 6px;
             font-size: 22px;
             text-align: center;
+            background: linear-gradient(90deg, #22c55e, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
           }
           .subtitle {
             text-align: center;
@@ -145,9 +151,24 @@ Detail: ${data.details || 'Coba lagi'}
             color: #94a3b8;
             margin-bottom: 22px;
           }
+          .api-status {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-bottom: 16px;
+            font-size: 12px;
+            text-align: center;
+          }
+          .api-status span {
+            color: #22c55e;
+            font-weight: bold;
+          }
           label {
             font-size: 13px;
             color: #cbd5f5;
+            display: block;
+            margin-top: 4px;
           }
           input {
             width: 100%;
@@ -222,20 +243,29 @@ Detail: ${data.details || 'Coba lagi'}
       </head>
       <body>
         <div className="card">
-          <h1>🚀 React ch whatsapp</h1>
+          <h1>🚀 Reactch Web v2</h1>
           <div className="subtitle">Send reaction to WhatsApp Channel post</div>
+          
+          <div className="api-status">
+            🔑 API Key: <span>dab69bae...</span> • 💰 Saldo: <span>147 KOIN</span>
+          </div>
           
           <label>🔗 Link Post Channel</label>
           <input id="link" placeholder="https://whatsapp.com/channel/xxx/123" />
           
-          <label>🎭 Emoji</label>
+          <label>🎭 Emoji (pisah dengan spasi)</label>
           <input id="emoji" placeholder="😂 😱 🔥" />
           
-          <button onClick={() => window.sendReact && window.sendReact()}>KIRIM REACT</button>
+          <button onClick={() => window.sendReact && window.sendReact()}>🚀 KIRIM REACT</button>
           
-          <div id="result" className="result">Status: -</div>
+          <div id="result" className="result">Status: Menunggu input...</div>
           
-          <div className="footer">© 2026 dhekzsukiloli</div>
+          <div className="footer">
+            © 2026 • Powered by dhekzsuli loli
+            <div style={{fontSize: '9px', marginTop: '4px', opacity: 0.7}}>
+              Format: Authorization: Bearer &lt;Key&gt;
+            </div>
+          </div>
         </div>
         
         <div className="music-player" onClick={() => window.toggleMusic && window.toggleMusic()}>
