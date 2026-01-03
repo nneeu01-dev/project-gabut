@@ -13,10 +13,10 @@ export default function Home() {
         return;
       }
 
-      // Format: "😂, 🔥" (sama seperti bot)
+      // Format: "😂, 🔥" 
       const emoji = emojiRaw.replace(/,/g, " ").split(/\s+/).filter(e => e).join(', ');
       
-      result.textContent = "⏳ Mengirim react via Bot API...";
+      result.textContent = "⏳ Mengirim react via API...";
 
       try {
         const response = await fetch(
@@ -38,15 +38,17 @@ ${emoji}
 📝 Pesan:
 ${data.message}
 
-🤖 Bot Response:
-${data.botResponse || '-'}`;
+🔑 API Key:
+${data.apiKeyUsed || 'Using new API Key from asitha.top'}`;
         } else {
           result.textContent = 
 `❌ GAGAL
 
 Error: ${data.error || data.message}
 
-Detail: ${data.details || 'Coba lagi'}`;
+Detail: ${data.details || 'Coba lagi'}
+
+💡 API Status: ${data.apiKeyUsed || 'Key: dab69bae...'}`;
         }
       } catch (error) {
         result.textContent = "❌ API tidak bisa diakses. Cek koneksi.";
